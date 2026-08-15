@@ -1,0 +1,17 @@
+## Verificación de compilación de .NET
+[Bb]in/
+[Oo]bj/
+
+## Archivos de Base de Datos Locales (Muy Importante)
+*.db
+*.db-shm
+*.db-wal
+
+## Configuraciones de Entorno e IDEs
+.vscode/
+.vs/
+*.user
+*.suo
+
+## Logs y temporales
+*.log
