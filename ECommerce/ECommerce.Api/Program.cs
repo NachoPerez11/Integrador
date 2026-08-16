@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ECommerce.Application.Integrations.PaymentService;
+using ECommerce.Infrastructure.Integrations.PaymentService;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -70,6 +72,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]!))
         };
     });
+
+builder.Services.AddHttpClient<IPaymentService, PaymentService>(client =>
+{
+    var paymentServiceUrl = builder.Configuration["Services:Payment"];
+    client.BaseAddress = new Uri(paymentServiceUrl);
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
+
 
 var app = builder.Build();
 
