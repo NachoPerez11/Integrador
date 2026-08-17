@@ -115,7 +115,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddHttpClient<IPaymentClient, PaymentClient>(client =>
 {
-    var paymentServiceUrl = builder.Configuration["Services:Payment"] ?? "https://localhost:7001";
+    var paymentServiceUrl = builder.Configuration["Services:Payment"] ?? "https://localhost:5123";
     
     client.BaseAddress = new Uri(paymentServiceUrl);
     client.Timeout = TimeSpan.FromSeconds(10);
