@@ -10,7 +10,6 @@ public class User : BaseEntity
     public string Role { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
-    // Constructor privado para EF Core
     private User()
     {
         Email = string.Empty;
@@ -19,7 +18,6 @@ public class User : BaseEntity
         Role = "User";
     }
 
-    // Factory method — única forma de crear un usuario válido
     public static User Create(string email, string name, string passwordHash, string role = "User")
     {
         if (string.IsNullOrWhiteSpace(email))

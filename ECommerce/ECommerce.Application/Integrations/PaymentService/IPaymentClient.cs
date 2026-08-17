@@ -1,6 +1,6 @@
-using Ecommerce.Application.Integrations.PaymentService.Models;
+using ECommerce.Application.Integrations.PaymentService.Models;
 
-namespace Ecommerce.Application.Integrations.PaymentService;
+namespace ECommerce.Application.Integrations.PaymentService;
 
 public interface IPaymentClient
 {

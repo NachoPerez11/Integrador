@@ -1,0 +1,13 @@
+C:\Users\nacho\Documentos\Nacho\UCC\2026\Backend\Integrador\PaymentService\PaymentService.Infrastructure\bin\Debug\net8.0\PaymentService.Infrastructure.deps.json
+C:\Users\nacho\Documentos\Nacho\UCC\2026\Backend\Integrador\PaymentService\PaymentService.Infrastructure\bin\Debug\net8.0\PaymentService.Infrastructure.dll
+C:\Users\nacho\Documentos\Nacho\UCC\2026\Backend\Integrador\PaymentService\PaymentService.Infrastructure\bin\Debug\net8.0\PaymentService.Infrastructure.pdb
+C:\Users\nacho\Documentos\Nacho\UCC\2026\Backend\Integrador\PaymentService\PaymentService.Infrastructure\obj\Debug\net8.0\PaymentService.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\nacho\Documentos\Nacho\UCC\2026\Backend\Integrador\PaymentService\PaymentService.Infrastructure\obj\Debug\net8.0\PaymentService.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\nacho\Documentos\Nacho\UCC\2026\Backend\Integrador\PaymentService\PaymentService.Infrastructure\obj\Debug\net8.0\PaymentService.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\nacho\Documentos\Nacho\UCC\2026\Backend\Integrador\PaymentService\PaymentService.Infrastructure\obj\Debug\net8.0\PaymentService.Infrastructure.AssemblyInfo.cs
+C:\Users\nacho\Documentos\Nacho\UCC\2026\Backend\Integrador\PaymentService\PaymentService.Infrastructure\obj\Debug\net8.0\PaymentService.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\nacho\Documentos\Nacho\UCC\2026\Backend\Integrador\PaymentService\PaymentService.Infrastructure\obj\Debug\net8.0\PaymentService.Infrastructure.sourcelink.json
+C:\Users\nacho\Documentos\Nacho\UCC\2026\Backend\Integrador\PaymentService\PaymentService.Infrastructure\obj\Debug\net8.0\PaymentService.Infrastructure.dll
+C:\Users\nacho\Documentos\Nacho\UCC\2026\Backend\Integrador\PaymentService\PaymentService.Infrastructure\obj\Debug\net8.0\refint\PaymentService.Infrastructure.dll
+C:\Users\nacho\Documentos\Nacho\UCC\2026\Backend\Integrador\PaymentService\PaymentService.Infrastructure\obj\Debug\net8.0\PaymentService.Infrastructure.pdb
+C:\Users\nacho\Documentos\Nacho\UCC\2026\Backend\Integrador\PaymentService\PaymentService.Infrastructure\obj\Debug\net8.0\ref\PaymentService.Infrastructure.dll
