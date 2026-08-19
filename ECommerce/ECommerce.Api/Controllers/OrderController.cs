@@ -18,6 +18,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command)
     {
         var orderId = await _mediator.Send(command);

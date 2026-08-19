@@ -25,8 +25,10 @@ public class PaymentClient : IPaymentClient
             
             return result ?? new PaymentResponseDto { Status = "Error", TransactionId = string.Empty };
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
+            Console.WriteLine($"\n---> ERROR DE CONEXIÓN: {ex.Message}\n");
+            
             return new PaymentResponseDto { Status = "ServiceUnavailable", TransactionId = string.Empty };
         }
         catch (TaskCanceledException)

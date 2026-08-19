@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ECommerce.Application.Features.Products.Commands;
 using ECommerce.Application.Features.Products.Queries;
@@ -10,14 +11,14 @@ namespace ECommerce.Api.Controllers;
 public class ProductsController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
     {
         var productId = await mediator.Send(command);
         
-        return CreatedAtAction(nameof(GetProducts), new { id = productId }, productId);
+        return Ok(new { ProductId = productId });
     }
 
-    // GET: api/products
     [HttpGet]
     public async Task<IActionResult> GetProducts([FromQuery] GetProductsQuery query)
     {
