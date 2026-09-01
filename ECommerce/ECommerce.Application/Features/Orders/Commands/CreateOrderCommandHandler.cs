@@ -11,7 +11,6 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
     private readonly IOrderRepository _orderRepository;
     private readonly IPaymentClient _paymentClient; // <-- Agregamos la interfaz del cliente HTTP
 
-    // Inyectamos ambas dependencias en el constructor
     public CreateOrderCommandHandler(IOrderRepository orderRepository, IPaymentClient paymentClient)
     {
         _orderRepository = orderRepository;
@@ -20,22 +19,17 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
 
     public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        // 1. Instanciamos la nueva orden
         var order = new Order(request.UserId, request.TotalAmount);
         
-        // 2. Armamos el DTO para el servicio de pagos con los datos de la orden
         var paymentRequest = new PaymentRequestDto 
         { 
             OrderId = order.Id, 
             Amount = order.TotalAmount 
         };
 
-        // 3. Llamamos al microservicio (PaymentService) para procesar el pago
         var paymentResponse = await _paymentClient.ProcessPaymentAsync(paymentRequest, cancellationToken);
         Console.WriteLine($"\n---> ESTADO DEVUELTO POR PAYMENT SERVICE: {paymentResponse.Status}\n");
 
-
-        // 4. Cambiamos el estado de la orden según lo que responda el servicio[cite: 1]
         if (paymentResponse.Status == "Approved")
         {
             order.Status = "Paid"; 
@@ -45,7 +39,6 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
             order.Status = "PaymentRejected";
         }
 
-        // 5. Guardamos la orden con su estado definitivo en la base de datos
         await _orderRepository.AddAsync(order, cancellationToken);
         
         return order.Id;

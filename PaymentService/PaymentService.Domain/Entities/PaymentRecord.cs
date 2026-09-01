@@ -13,7 +13,6 @@ public class PaymentRecord
         Amount = amount;
     }
 
-    // La regla vive acá, en el dominio
     public void Process()
     {
         if (Amount <= 100000)
