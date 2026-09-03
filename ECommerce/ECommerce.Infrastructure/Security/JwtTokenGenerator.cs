@@ -1,10 +1,15 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using ECommerce.Application.Contracts.Security;
-using ECommerce.Domain.Entities;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+
+using ECommerce.Domain.Entities;
+
+using ECommerce.Application.Contracts.Security;
+
+
 
 namespace ECommerce.Infrastructure.Security;
 
@@ -22,7 +27,7 @@ public class JwtTokenGenerator(IConfiguration configuration) : IJwtTokenGenerato
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email.Value),
             new Claim(ClaimTypes.Name, user.Name),
             new Claim(ClaimTypes.Role, user.Role),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())

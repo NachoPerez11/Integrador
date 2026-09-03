@@ -1,55 +1,120 @@
-# Trabajo Final Integrador - Backend (Optativa II)
+# E-Commerce y Payment Service — Arquitectura Limpia
 
-**Alumno:** Ignacio Perez
-**Universidad:** Universidad Católica de Cuyo
+Este repositorio contiene la solución completa de un sistema distribuido compuesto por la API principal de **E-Commerce** y su microservicio integrado de pagos (**Payment Service**). Todo el ecosistema está construido bajo los estrictos lineamientos de la **Arquitectura Limpia**, aplicando patrones como **CQRS**, **Unit of Work**, **Repository Pattern** y **Value Objects**. Utiliza **Entity Framework Core** con **SQLite** para la persistencia de datos en cada servicio, **JWT** para la seguridad basada en roles, y comunicación HTTP síncrona mediante `HttpClient`.
 
-## Descripción del Proyecto
-
-Este repositorio contiene la resolución del examen final práctico. Consiste en un sistema distribuido compuesto por dos microservicios comunicados de forma síncrona mediante HTTP (`HttpClient`). Ambos proyectos están construidos aplicando **Clean Architecture**, el patrón **CQRS** con MediatR, y utilizando **Entity Framework Core (v8.0.11)**.
-
-### Opción Elegida: Payment Service
-Se desarrolló un servicio de pagos independiente para simular la aprobación o rechazo de transacciones al confirmar una orden en el E-Commerce.
-
-**Regla de Negocio:**
-El `PaymentService` evalúa el monto total de la orden recibida. 
-* Si el monto es **menor a $100.000**, el servicio aprueba el pago devolviendo el estado `Approved`.
-* Si el monto es **igual o mayor a $100.000**, el pago es rechazado devolviendo `Rejected`. 
-* El E-Commerce actúa en consecuencia actualizando el estado de la orden en su propia base de datos a `Paid` o `PaymentRejected`.
+Desarrollado para la asignatura **Backend** de la Tecnicatura Universitaria en Desarrollo de Software de la Universidad Católica de Cuyo.
 
 ---
 
-## Estructura de Servicios y Puertos
+## Estructura de la Solución
 
-*   **E-Commerce API:** Se ejecuta en `http://localhost:5263`
-*   **Payment Service:** Se ejecuta en `http://localhost:5132`
+La solución agrupa las capas independientes de ambos sistemas para aislar la lógica de negocio de la infraestructura y respetar la regla de Inversión de Dependencias:
 
----
+* **`Ecosistema E-Commerce`**:
+  * `ECommerce.Domain`: Capa central sin dependencias. Entidades, Value Objects, excepciones personalizadas y reglas de negocio encapsuladas mediante constructores privados.
+  * `ECommerce.Application`: Orquestador del sistema. Implementa CQRS mediante MediatR (Commands y Queries), interfaces/contratos, DTOs y validación centralizada de entradas con FluentValidation.
+  * `ECommerce.Infrastructure`: Capa de datos y servicios externos. Contexto de base de datos, Fluent API, repositorios concretos, inyección de `HttpClient` para conectar con el módulo de pagos, hashing con BCrypt y generación de tokens JWT.
+  * `ECommerce.Api`: Punto de entrada web de la tienda. Controladores, configuración de Middlewares y seguridad por roles.
 
-## Cómo ejecutar el proyecto (End-to-End)
-
-Para reproducir el flujo completo de comunicación entre ambos servicios, es necesario ejecutarlos en simultáneo.
-
-1. Abrir una terminal en la carpeta del servicio de pagos (`PaymentService.Api`) y ejecutar el comando:
-   `dotnet run`
-2. Abrir una segunda terminal en la carpeta principal del sistema (`ECommerce.Api`) y ejecutar:
-   `dotnet run`
-3. Navegar a la interfaz de Swagger del E-Commerce: `http://localhost:5263/swagger`
-
----
-
-## Credenciales de Prueba (Usuario Admin)
-
-El sistema cuenta con un usuario Administrador generado en tiempo de ejecución (Seed) para probar los endpoints protegidos.
-
-*   **Email:** admin@ecommerce.com
-*   **Contraseña:** Admin123456
+* **Ecosistema de Pagos**:
+  * `PaymentService.Domain`: Modelo de negocio aislado para la gestión de transacciones y validaciones internas de cobro.
+  * `PaymentService.Application`: Casos de uso y DTOs específicos para el procesamiento de transacciones.
+  * `PaymentService.Infrastructure`.
+  * `PaymentService.Api`: Endpoints HTTP expuestos para que la tienda principal solicite y evalúe las aprobaciones o rechazos de cobro.
 
 ---
 
-## Prueba del Flujo Distribuido
+## Tecnologías y Herramientas Utilizadas
 
-1. En el Swagger del E-Commerce, utilizar el endpoint de **Login** con las credenciales del Admin.
-2. Copiar el token JWT devuelto y pegarlo en el botón **Authorize**.
-3. Dirigirse al endpoint `POST /api/orders` y enviar una petición con un monto de prueba (ej. `5000`).
-4. El E-Commerce se comunicará internamente por HTTP al puerto `5132` del Payment Service.
-5. Se devolverá una respuesta HTTP 200 confirmando el proceso, y la orden quedará asentada.
+* **Framework:** .NET 8.0 (SDK)
+* **Persistencia:** Entity Framework Core 8.0 (SQLite)
+* **Patrones Arquitectónicos:** Clean Architecture, CQRS, Repository Pattern, Unit of Work, Value Objects.
+* **Librerías Clave:** MediatR, FluentValidation, BCrypt.Net-Next, Jwt.
+* **Documentación:** Swagger UI.
+
+---
+
+## Requisitos e Instalación
+
+Al tratarse de un sistema distribuido, se deben configurar y ejecutar ambos proyectos de manera coordinada.
+
+### 1. Clonar el repositorio
+```bash
+git clone <https://github.com/NachoPerez11/Integrador.git>
+```
+
+### 2. Configuración de Variables de Entorno (appsettings.json)
+
+* **Para el E-Commerce (`ECommerce.Api/appsettings.json`):**
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=ecommerce.db"
+  },
+  "JwtSettings": {
+    "Secret": "AcaVaUnaClaveSuperSecretaYLargaParaQueFuncioneElJWT123!",
+    "Issuer": "ECommerceApi",
+    "Audience": "ECommerceUsers"
+  },
+  "Services": {
+    "Payment": "http://localhost:5132" 
+  }
+}
+```
+
+* **Para el Payment Service (`PaymentService.Api/appsettings.json`):**
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=payments.db"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}
+```
+
+### 3. Creación y Migración de Bases de Datos
+Ejecute los comandos de migraciones para generar el archivo físico de SQLite con sus respectivas tablas:
+
+* **Base de datos de E-Commerce:**
+  ```dotnetcli
+  dotnet ef migrations add Initial -p ECommerce.Infrastructure -s ECommerce.Api
+  dotnet ef database update -p ECommerce.Infrastructure -s ECommerce.Api
+  ```
+
+### 4. Ejecución del Sistema Distribuido
+Para que la integración funcione, mantenga abiertas dos terminales simultáneas:
+
+* **Terminal 1 (Microservicio de Pagos):**
+  ```bash
+  cd PaymentService.Api
+  dotnet run
+  ```
+
+* **Terminal 2 (API de E-Commerce):**
+  ```bash
+  cd ECommerce.Api
+  dotnet run
+  ```
+
+---
+
+## Flujo de Integración, Pruebas y Endpoints
+
+Una vez levantados ambos servicios, puede interactuar mediante sus respectivas interfaces de **Swagger UI** en el navegador.
+
+### Operaciones en E-Commerce API:
+1. **Autenticación y Roles:** * Registre un usuario en `POST /api/Auth/register`.
+   * Inicie sesión en `POST /api/Auth/login` para obtener el Token JWT y autorizar las peticiones en Swagger.
+2. **Gestión de Productos:** * Utilice `POST /api/Products` (exclusivo para rol `Admin`) para dar de alta artículos bajo validaciones de dominio.
+   * Utilice `GET /api/Products` para consultar el catálogo público.
+3. **Creación de Órdenes e Integración:**
+   * Envíe un `POST /api/Orders` con el `UserId` y el `TotalAmount`.
+
+### 💳 Operaciones en Payment Service API:
+1. **Procesamiento de Cobros:** * Expone el endpoint `POST /api/payments/process`, el cual recibe el identificador de la orden y el monto.

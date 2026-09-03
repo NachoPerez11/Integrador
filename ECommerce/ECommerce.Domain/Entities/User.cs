@@ -1,10 +1,11 @@
 using ECommerce.Domain.Exceptions;
+using ECommerce.Domain.ValueObjects;
 
 namespace ECommerce.Domain.Entities;
 
 public class User : BaseEntity
 {
-    public string Email { get; private set; }
+    public Email Email { get; private set; }
     public string Name { get; private set; }
     public string PasswordHash { get; private set; }
     public string Role { get; private set; }
@@ -12,7 +13,7 @@ public class User : BaseEntity
 
     private User()
     {
-        Email = string.Empty;
+        Email = null!;
         Name = string.Empty;
         PasswordHash = string.Empty;
         Role = "User";
@@ -20,6 +21,9 @@ public class User : BaseEntity
 
     public static User Create(string email, string name, string passwordHash, string role = "User")
     {
+
+        var emailValueObject = Email.Create(email);
+
         if (string.IsNullOrWhiteSpace(email))
             throw new DomainRuleException("El email es obligatorio.");
             
@@ -31,7 +35,7 @@ public class User : BaseEntity
 
         return new User
         {
-            Email = email.Trim(),
+            Email = emailValueObject,
             Name = name.Trim(),
             PasswordHash = passwordHash,
             Role = string.IsNullOrWhiteSpace(role) ? "User" : role.Trim(),

@@ -1,5 +1,6 @@
 using MediatR;
 using ECommerce.Domain.Entities;
+using ECommerce.Domain.Exceptions;
 using ECommerce.Application.Contracts.Persistence; 
 using ECommerce.Application.Contracts.Security;
 
@@ -14,7 +15,7 @@ public class RegisterUserCommandHandler(
     public async Task<Guid> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         var emailExists = await userRepository.EmailExistsAsync(request.Email, cancellationToken);
-        if (emailExists) throw new Exception("El email ya está registrado.");
+        if (emailExists) throw new DomainRuleException("El email ya está registrado.");
 
         var hashedPassword = passwordHasher.Hash(request.Password);
         

@@ -2,7 +2,7 @@
 [Bb]in/
 [Oo]bj/
 
-## Archivos de Base de Datos Locales (Muy Importante)
+## Archivos de Base de Datos Locales
 *.db
 *.db-shm
 *.db-wal

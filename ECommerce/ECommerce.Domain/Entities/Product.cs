@@ -9,14 +9,12 @@ public class Product : BaseEntity
     public int Stock { get; private set; }
     public bool IsActive { get; private set; }
     
-    // Constructor privado para EF Core
     private Product()
     {
         Name = string.Empty;
         Description = string.Empty;
     }
 
-    // Factory method — única forma de crear un producto válido
     public static Product Create(string name, string description, decimal price, int stock)
     {
         if (string.IsNullOrWhiteSpace(name)) 
