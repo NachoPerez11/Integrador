@@ -116,5 +116,5 @@ Una vez levantados ambos servicios, puede interactuar mediante sus respectivas i
 3. **Creación de Órdenes e Integración:**
    * Envíe un `POST /api/Orders` con el `UserId` y el `TotalAmount`.
 
-### 💳 Operaciones en Payment Service API:
+### Operaciones en Payment Service API:
 1. **Procesamiento de Cobros:** * Expone el endpoint `POST /api/payments/process`, el cual recibe el identificador de la orden y el monto.
